@@ -6,56 +6,134 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Button, CircularProgress, Box } from "@mui/material";
+import { useEffect, useState } from "react";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(name, coc1, coc2, coc3) {
+  return { name, coc1, coc2, coc3 };
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
+const allRows = [
+  createData("John Carlo", "Passed", "Failed", "Passed"),
+  createData("Jasd Carlo", "Failed", "Failed", "Passed"),
+  createData("John Carlo", "Pending", "Failed", "Passed"),
+  createData("John Carlo", "Passed", "Failed", "Passed"),
+  createData("John Carlo", "Passed", "Failed", "Passed"),
+  createData("John Carlo", "Passed", "Failed", "Passed"),
+  createData("John Carlo", "Failed", "Passed", "Passed"),
+  createData("John Carlo", "Passed", "Passed", "Passed"),
+  createData("John Carlo", "Pending", "Failed", "Passed"),
+  createData("John Carlo", "Passed", "Passed", "Passed"),
+  createData("John Carlo", "Passed", "Failed", "Failed"),
+  createData("asjkdhjkashdrlo", "Passed", "Passed", "Passed"),
 ];
 
-export default function BasicTable() {
+export default function BasicTable({ searchQuery = "" }) {
+  const [visibleRows, setVisibleRows] = useState(allRows.slice(0, 10));
+  const [loading, setLoading] = React.useState(false);
+  const [index, setIndex] = React.useState(10);
+
+  const rowsPerPage = 10;
+
+  const filteredRows = allRows.filter((row) =>
+    row.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    setVisibleRows(filteredRows.slice(0, rowsPerPage));
+    setIndex(rowsPerPage);
+  }, [searchQuery]);
+
+  const loadMore = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setVisibleRows((prev) => [
+        ...prev,
+        ...filteredRows.slice(index, index + rowsPerPage),
+      ]);
+      setIndex((prev) => prev + rowsPerPage);
+      setLoading(false);
+    }, 1000);
+  };
+
+  const getStatusColor = (status) =>
+    status === "Passed" ? "green" : status === "Pending" ? "gray" : "red";
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  color: "#1976d2",
+                }}
+              >
+                Students
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              <TableCell align="right">COC 1</TableCell>
+              <TableCell align="right">COC 2</TableCell>
+              <TableCell align="right">COC 3</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {visibleRows.map((row, i) => (
+              <TableRow
+                key={i}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ color: getStatusColor(row.coc1) }}
+                >
+                  {row.coc1}
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ color: getStatusColor(row.coc2) }}
+                >
+                  {row.coc2}
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ color: getStatusColor(row.coc3) }}
+                >
+                  {row.coc3}
+                </TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => alert("Output View")}
+                  >
+                    View Output
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Loading spinner or Load More */}
+      <Box mt={2} display="flex" justifyContent="center">
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          index < allRows.length && (
+            <Button variant="outlined" onClick={loadMore}>
+              Load More
+            </Button>
+          )
+        )}
+      </Box>
+    </>
   );
 }

@@ -4,22 +4,23 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
+import { useState } from "react";
 
 const cards = [
   {
     id: 1,
     title: "40",
-    description: "Students",
+    description: "All Students",
   },
   {
     id: 1,
     title: "40",
-    description: "Students",
+    description: "Passed",
   },
   {
     id: 1,
     title: "40",
-    description: "Students",
+    description: "Failed",
   },
   {
     id: 1,
@@ -29,7 +30,7 @@ const cards = [
 ];
 
 function SelectActionCard() {
-  const [selectedCard, setSelectedCard] = React.useState(0);
+  const [selectedCard, setSelectedCard] = useState(0);
   return (
     <Box
       sx={{

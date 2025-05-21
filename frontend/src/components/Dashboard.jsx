@@ -10,6 +10,7 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { DemoProvider, useDemoRouter } from "@toolpad/core/internal";
 import Students from "../pages/Students";
 import Dashboard from "../pages/Dashboard";
+import Settings from "../pages/Settings";
 
 const NAVIGATION = [
   {
@@ -24,6 +25,15 @@ const NAVIGATION = [
   {
     segment: "students",
     title: "Students",
+    icon: <PeopleIcon />,
+  },
+  {
+    kind: "header",
+    title: "Settings",
+  },
+  {
+    segment: "settings",
+    title: "Settings",
     icon: <PeopleIcon />,
   },
 
@@ -81,6 +91,8 @@ function DemoPageContent({ pathname }) {
     >
       {pathname === "/students" ? (
         <Students pathname="students" />
+      ) : pathname === "/settings" ? (
+        <Settings pathname="settings" />
       ) : (
         <Dashboard pathname="dashboard" />
       )}
@@ -97,12 +109,13 @@ function DashboardLayoutBasic(props) {
 
   const router = useDemoRouter("/dashboard");
   const demoWindow = window !== undefined ? window() : undefined;
+  console.log(demoWindow);
 
   return (
     <DemoProvider window={demoWindow}>
       <AppProvider
         branding={{
-          title: "Virtual-Lab Simulator in Cookery",
+          title: "Virtual-Lab Simulator",
         }}
         navigation={NAVIGATION}
         router={router}
