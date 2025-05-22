@@ -16,7 +16,19 @@ const Dashboard = ({ pathname }) => {
         gap: 4,
       }}
     >
-      <SelectActionCard />
+      <Box
+        sx={{
+          width: "100%",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+          gap: 4,
+        }}
+      >
+        <SelectActionCard />
+        <SelectActionCard />
+        <SelectActionCard />
+        <SelectActionCard />
+      </Box>
 
       <Box
         sx={{

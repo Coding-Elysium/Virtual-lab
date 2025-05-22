@@ -19,7 +19,7 @@ export default function BasicBars() {
       <BarChart
         xAxis={[{ data: ["COC 1", "COC 2", "COC 3"] }]}
         series={[
-          { data: [4, 3, 5], label: "Pending", color: "#FFA726" }, // orange
+          { data: [4, 3, 5], label: "Pending", color: "#FFA726" },
           { data: [1, 6, 3], label: "Passed", color: "#66BB6A" }, // green
           { data: [2, 5, 10], label: "Failed", color: "#EF5350" }, // red
         ]}
