@@ -1,10 +1,6 @@
-import { Box, Button } from "@mui/material";
-import React, { useState } from "react";
-import SelectActionCard from "../components/Card";
-import BasicTable from "../components/Table";
-import TypeSearch from "../components/SearchInput";
-import BasicModal from "../components/Modal";
-import BasicBars from "../components/BarGraph";
+import { Box } from "@mui/material";
+import CardComponent from "../components/CardComponent";
+import BarGraphComponent from "../components/BarGraphComponen";
 
 const Dashboard = ({ pathname }) => {
   return (
@@ -20,14 +16,14 @@ const Dashboard = ({ pathname }) => {
         sx={{
           width: "100%",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
           gap: 4,
         }}
       >
-        <SelectActionCard />
-        <SelectActionCard />
-        <SelectActionCard />
-        <SelectActionCard />
+        <CardComponent />
+        <CardComponent />
+        <CardComponent />
+        <CardComponent />
       </Box>
 
       <Box
@@ -38,8 +34,8 @@ const Dashboard = ({ pathname }) => {
           width: "100%",
         }}
       >
-        <BasicBars />
-        <BasicBars />
+        <BarGraphComponent />
+        <BarGraphComponent />
       </Box>
     </Box>
   );

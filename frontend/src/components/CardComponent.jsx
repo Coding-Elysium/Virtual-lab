@@ -2,11 +2,10 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-function SelectActionCard() {
+function CardComponent() {
   return (
     <Box
       sx={{
-        width: "100%",
         gap: 2,
         padding: 2,
         border: "1px solid #ccc",
@@ -23,4 +22,4 @@ function SelectActionCard() {
   );
 }
 
-export default SelectActionCard;
+export default CardComponent;

@@ -28,7 +28,7 @@ const style = {
   borderRadius: 2,
 };
 
-export default function BasicModal({ open, onClose }) {
+export default function ModalComponent({ open, onClose }) {
   const [form, setForm] = React.useState({
     firstName: "",
     middleName: "",

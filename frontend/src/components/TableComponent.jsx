@@ -28,7 +28,7 @@ const allRows = [
   createData("asjkdhjkashdrlo", "Passed", "Passed", "Passed"),
 ];
 
-export default function BasicTable({ searchQuery = "" }) {
+export default function TableComponent({ searchQuery = "" }) {
   const [visibleRows, setVisibleRows] = useState(allRows.slice(0, 10));
   const [loading, setLoading] = React.useState(false);
   const [index, setIndex] = React.useState(10);

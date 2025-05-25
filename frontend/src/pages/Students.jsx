@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import UserCardStyled from "../components/UserCard";
 import { Box, Button } from "@mui/material";
-import BasicModal from "../components/Modal";
-import BasicTable from "../components/Table";
-import TypeSearch from "../components/SearchInput";
+import ModalComponent from "../components/ModalComponent";
+import TableComponent from "../components/TableComponent";
+import SearchInputComponent from "../components/SearchInputComponent";
 
 const Students = ({ pathname }) => {
   const [query, setQuery] = useState("");
@@ -32,7 +31,7 @@ const Students = ({ pathname }) => {
         }}
       >
         <Box sx={{ flex: 1 }}>
-          <TypeSearch
+          <SearchInputComponent
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onClear={() => setQuery("")}
@@ -50,9 +49,9 @@ const Students = ({ pathname }) => {
         </Button>
       </Box>
 
-      <BasicTable searchQuery={query} />
+      <TableComponent searchQuery={query} />
 
-      <BasicModal open={openModal} onClose={handleCloseModal} />
+      <ModalComponent open={openModal} onClose={handleCloseModal} />
     </Box>
   );
 };

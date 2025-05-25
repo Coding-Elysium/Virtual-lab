@@ -1,10 +1,11 @@
 import "./App.css";
-import DashboardLayoutBasic from "./components/Dashboard";
+import DashboardMain from "./components/DashboardMain";
+import Login from "./pages/Login";
 
 function App() {
   return (
     <>
-      <DashboardLayoutBasic />
+      <Login />
     </>
   );
 }

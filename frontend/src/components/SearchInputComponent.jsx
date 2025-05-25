@@ -11,7 +11,7 @@ import ClearIcon from "@mui/icons-material/Clear";
  * - placeholder: string
  * - sx: MUI style object
  */
-const TypeSearch = ({
+const SearchInputComponent = ({
   value,
   onChange,
   onClear,
@@ -44,4 +44,4 @@ const TypeSearch = ({
   );
 };
 
-export default TypeSearch;
+export default SearchInputComponent;

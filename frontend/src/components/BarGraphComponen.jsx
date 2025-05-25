@@ -2,7 +2,7 @@ import * as React from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { Box, Typography } from "@mui/material";
 
-export default function BasicBars() {
+export default function BarGraphComponent() {
   return (
     <Box
       sx={{

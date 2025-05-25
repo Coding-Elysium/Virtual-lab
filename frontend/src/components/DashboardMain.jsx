@@ -33,7 +33,7 @@ const NAVIGATION = [
   },
   {
     segment: "settings",
-    title: "Settings",
+    title: "Logout",
     icon: <PeopleIcon />,
   },
 
@@ -104,7 +104,7 @@ DemoPageContent.propTypes = {
   pathname: PropTypes.string.isRequired,
 };
 
-function DashboardLayoutBasic(props) {
+function DashboardMain(props) {
   const { window } = props;
 
   const router = useDemoRouter("/dashboard");
@@ -130,8 +130,8 @@ function DashboardLayoutBasic(props) {
   );
 }
 
-DashboardLayoutBasic.propTypes = {
+DashboardMain.propTypes = {
   window: PropTypes.func,
 };
 
-export default DashboardLayoutBasic;
+export default DashboardMain;
