@@ -9,7 +9,9 @@ import {
   Paper,
   Button,
   Checkbox,
+  Box,
 } from "@mui/material";
+import { useState, useEffect } from "react";
 
 const rowsPerPage = 10;
 
@@ -17,38 +19,50 @@ export default function TableComponent({
   rows = [],
   columns = [],
   searchQuery = "",
-  onBulkAction = () => {},
   actionLabel = "Perform Action",
   hasCheckbox = true,
   hasAction = true,
+  onSelectionChange = () => {},
 }) {
-  const [visibleRows, setVisibleRows] = React.useState([]);
-  const [index, setIndex] = React.useState(rowsPerPage);
-  const [selectedRows, setSelectedRows] = React.useState([]);
+  const [visibleRows, setVisibleRows] = useState([]);
+  const [index, setIndex] = useState(rowsPerPage);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const filteredRows = rows.filter((row) =>
     row.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  React.useEffect(() => {
-    setVisibleRows(filteredRows.slice(0, rowsPerPage));
+  useEffect(() => {
+    const firstSlice = filteredRows.slice(0, rowsPerPage);
+    setVisibleRows(firstSlice);
     setIndex(rowsPerPage);
     setSelectedRows([]);
+    onSelectionChange([]);
   }, [searchQuery, rows]);
 
   const handleSelectAll = (event) => {
-    if (event.target.checked) {
-      const allIds = visibleRows.map((_, i) => i);
-      setSelectedRows(allIds);
-    } else {
-      setSelectedRows([]);
-    }
+    const newSelected = event.target.checked ? visibleRows : [];
+    setSelectedRows(newSelected);
+    onSelectionChange(newSelected);
+    console.log("Selected Rows:", newSelected);
   };
 
-  const handleSelectRow = (idx) => {
-    setSelectedRows((prev) =>
-      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
-    );
+  const handleSelectRow = (row) => {
+    setSelectedRows((prev) => {
+      const exists = prev.includes(row);
+      const updated = exists ? prev.filter((r) => r !== row) : [...prev, row];
+      onSelectionChange(updated);
+      console.log("Selected Rows:", updated);
+      return updated;
+    });
+  };
+
+  const Accepted = () => {
+    console.log("Accepted action performed");
+  };
+
+  const Rejected = () => {
+    console.log("Rejected action performed");
   };
 
   const getStatusColor = (status) => {
@@ -95,8 +109,8 @@ export default function TableComponent({
               {hasCheckbox && (
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedRows.includes(i)}
-                    onChange={() => handleSelectRow(i)}
+                    checked={selectedRows.includes(row)}
+                    onChange={() => handleSelectRow(row)}
                   />
                 </TableCell>
               )}
@@ -116,6 +130,29 @@ export default function TableComponent({
                       <Button variant="outlined" size="small">
                         {actionLabel}
                       </Button>
+                    ) : col.key === "accepted" ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={Accepted}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={Rejected}
+                        >
+                          Declined
+                        </Button>
+                      </Box>
                     ) : (
                       row[col.key]
                     )}

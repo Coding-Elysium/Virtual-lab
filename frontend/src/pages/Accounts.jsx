@@ -13,48 +13,42 @@ const Accounts = ({ pathname }) => {
 
   const columns = [
     { key: "name", label: "First Name" },
-    { key: "coc1", label: "Last Name" },
-    { key: "coc2", label: "Email" },
-    { key: "coc3", label: "Grade Level" },
-    { key: "status", label: "Status", colorStatus: true },
-    { key: "action", label: "Action" },
+    { key: "lastName", label: "Last Name" },
+    { key: "email", label: "Email" },
+    { key: "gradeLevel", label: "Grade Level" },
+    { key: "accepted", label: "Action" },
   ];
 
   const data = [
     {
       name: "John Carlo",
-      coc1: "Passed",
-      coc2: "Failed",
-      coc3: "Passed",
-      status: "Accepted",
+      lastName: "Abanes",
+      email: "johnc@example.com",
+      gradeLevel: "10",
     },
     {
-      name: "Jasd Carlo",
-      coc1: "Failed",
-      coc2: "Failed",
-      coc3: "Passed",
-      status: "Rejected",
+      name: "John Carlo",
+      lastName: "Abanes",
+      email: "johnc@example.com",
+      gradeLevel: "10",
     },
     {
-      name: "Jasd Carlo",
-      coc1: "Failed",
-      coc2: "Failed",
-      coc3: "Passed",
-      status: "Accepted",
+      name: "John Carlo",
+      lastName: "Abanes",
+      email: "johnc@example.com",
+      gradeLevel: "10",
     },
     {
-      name: "Jasd Carlo",
-      coc1: "Failed",
-      coc2: "Failed",
-      coc3: "Passed",
-      status: "Accepted",
+      name: "John Carlo",
+      lastName: "Abanes",
+      email: "johnc@example.com",
+      gradeLevel: "10",
     },
     {
-      name: "asdsadsad Carlo",
-      coc1: "Failed",
-      coc2: "Failed",
-      coc3: "Passed",
-      status: "Accepted",
+      name: "John Carlo",
+      lastName: "Abanes",
+      email: "johnc@example.com",
+      gradeLevel: "10",
     },
   ];
 
@@ -100,13 +94,9 @@ const Accounts = ({ pathname }) => {
         rows={data}
         columns={columns}
         searchQuery={query}
-        hasCheckbox={true}
+        hasCheckbox={false}
         hasAction={true}
         actionLabel="View Details"
-        onBulkAction={(selected) => {
-          console.log("Selected rows: ", selected);
-          alert("You selected " + selected.length + " rows.");
-        }}
       />
 
       <ModalComponent open={openModal} onClose={handleCloseModal} />
