@@ -6,10 +6,20 @@ import SearchInputComponent from "../components/SearchInputComponent";
 
 const Students = ({ pathname }) => {
   const [query, setQuery] = useState("");
-  const [openModal, setOpenModal] = useState(false);
 
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const columns = [
+    { key: "name", label: "Students" },
+    { key: "coc1", label: "COC 1", colorStatus: true },
+    { key: "coc2", label: "COC 2", colorStatus: true },
+    { key: "coc3", label: "COC 3", colorStatus: true },
+    { key: "action", label: "Action", colorStatus: true },
+  ];
+
+  const data = [
+    { name: "John Carlo", coc1: "Passed", coc2: "Failed", coc3: "Passed" },
+    { name: "Jasd Carlo", coc1: "Failed", coc2: "Failed", coc3: "Passed" },
+    { name: "asdsadsad Carlo", coc1: "Failed", coc2: "Failed", coc3: "Passed" },
+  ];
 
   return (
     <Box
@@ -39,19 +49,20 @@ const Students = ({ pathname }) => {
             sx={{ width: "100%", maxWidth: 400 }}
           />
         </Box>
-
-        <Button
-          onClick={handleOpenModal}
-          variant="contained"
-          sx={{ whiteSpace: "nowrap" }}
-        >
-          Add Student
-        </Button>
       </Box>
 
-      <TableComponent searchQuery={query} />
-
-      <ModalComponent open={openModal} onClose={handleCloseModal} />
+      <TableComponent
+        rows={data}
+        columns={columns}
+        searchQuery={query}
+        hasCheckbox={false}
+        hasAction={true}
+        actionLabel="View Student Record"
+        onBulkAction={(selected) => {
+          console.log("Selected rows: ", selected);
+          alert("You selected " + selected.length + " rows.");
+        }}
+      />
     </Box>
   );
 };

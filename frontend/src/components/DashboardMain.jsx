@@ -11,6 +11,7 @@ import { DemoProvider, useDemoRouter } from "@toolpad/core/internal";
 import Students from "../pages/Students";
 import Dashboard from "../pages/Dashboard";
 import Settings from "../pages/Settings";
+import Accounts from "../pages/Accounts";
 
 const NAVIGATION = [
   {
@@ -25,6 +26,11 @@ const NAVIGATION = [
   {
     segment: "students",
     title: "Students",
+    icon: <PeopleIcon />,
+  },
+  {
+    segment: "accounts",
+    title: "Accounts",
     icon: <PeopleIcon />,
   },
   {
@@ -93,6 +99,8 @@ function DemoPageContent({ pathname }) {
         <Students pathname="students" />
       ) : pathname === "/settings" ? (
         <Settings pathname="settings" />
+      ) : pathname === "/accounts" ? (
+        <Accounts pathname="accounts" />
       ) : (
         <Dashboard pathname="dashboard" />
       )}
