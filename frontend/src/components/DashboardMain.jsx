@@ -10,8 +10,9 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { DemoProvider, useDemoRouter } from "@toolpad/core/internal";
 import Students from "../pages/Students";
 import Dashboard from "../pages/Dashboard";
-import Settings from "../pages/Settings";
 import Accounts from "../pages/Accounts";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const NAVIGATION = [
   {
@@ -34,41 +35,10 @@ const NAVIGATION = [
     icon: <PeopleIcon />,
   },
   {
-    kind: "header",
-    title: "Settings",
-  },
-  {
-    segment: "settings",
+    segment: "logout",
     title: "Logout",
     icon: <PeopleIcon />,
   },
-
-  //   {
-  //     kind: "divider",
-  //   },
-
-  //   {
-  //     segment: "reports",
-  //     title: "Reports",
-  //     icon: <BarChartIcon />,
-  //     children: [
-  //       {
-  //         segment: "sales",
-  //         title: "Sales",
-  //         icon: <DescriptionIcon />,
-  //       },
-  //       {
-  //         segment: "traffic",
-  //         title: "Traffic",
-  //         icon: <DescriptionIcon />,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     segment: "integrations",
-  //     title: "Integrations",
-  //     icon: <LayersIcon />,
-  //   },
 ];
 
 const demoTheme = createTheme({
@@ -88,19 +58,21 @@ const demoTheme = createTheme({
 });
 
 function DemoPageContent({ pathname }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (pathname === "/logout") {
+      localStorage.removeItem("token");
+      navigate("/", { replace: true });
+    }
+  }, [pathname, navigate]);
   return (
-    <Box
-      sx={{
-        py: 4,
-        px: 4,
-      }}
-    >
+    <Box sx={{ py: 4, px: 4 }}>
       {pathname === "/students" ? (
         <Students pathname="students" />
-      ) : pathname === "/settings" ? (
-        <Settings pathname="settings" />
       ) : pathname === "/accounts" ? (
         <Accounts pathname="accounts" />
+      ) : pathname === "/logout" ? (
+        <Typography>Logging out...</Typography>
       ) : (
         <Dashboard pathname="dashboard" />
       )}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -9,29 +9,46 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
+import axios from "axios";
 
 const Login = () => {
   const [account, setAccount] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
   const navigate = useNavigate();
 
-  const handelAccount = (field, event) => {
-    setAccount({ ...account, [field]: event.target.value });
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Logging in with:", account);
 
-    if (account.username === "admin123" && account.password === "qweqwe") {
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials.");
-    }
+    axios
+      .post("http://localhost:5000/auth/login", account)
+      .then((response) => {
+        console.log("Login successful:", response.data);
+        localStorage.setItem("token", response.data.token);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        setAccount({ email: "", password: "" });
+      });
   };
+
+  const handleAccount = (name, event) => {
+    setAccount({
+      ...account,
+      [name]: event.target.value,
+    });
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, []);
 
   return (
     <Box
@@ -53,18 +70,20 @@ const Login = () => {
         </Typography>
         <form noValidate onSubmit={handleSubmit}>
           <TextField
-            onChange={(event) => handelAccount("username", event)}
+            value={account.email}
+            onChange={(event) => handleAccount("email", event)}
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
+            id="email"
+            label="Email"
+            name="email"
             autoFocus
           />
           <TextField
-            onChange={(event) => handelAccount("password", event)}
+            value={account.password}
+            onChange={(event) => handleAccount("password", event)}
             variant="outlined"
             margin="normal"
             required
