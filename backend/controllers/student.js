@@ -1,7 +1,7 @@
 import Student from "../schema/StudentModel.js";
 import bcrypt from "bcrypt";
 
-export const addStudent = async (req, res) => {
+export const createStudent = async (req, res) => {
   try {
     const { lrn, firstName, lastName, email, password, gradeLevel } = req.body;
 

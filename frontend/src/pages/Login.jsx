@@ -24,7 +24,7 @@ const Login = () => {
     console.log("Logging in with:", account);
 
     axios
-      .post("http://localhost:5000/auth/login", account)
+      .post("http://localhost:5000/auth/loginAdmin", account)
       .then((response) => {
         console.log("Login successful:", response.data);
         localStorage.setItem("token", response.data.token);

@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import studentRoute from "./routes/studentRoute.js";
 import authRoute from "./routes/authRoute.js";
+import adminRoute from "./routes/adminRoute.js";
+import cocRoute from "./routes/cocRoute.js";
 import cors from "cors";
 
 dotenv.config();
@@ -20,6 +22,8 @@ app.use(
 app.use(express.json());
 app.use("/student", studentRoute);
 app.use("/auth", authRoute);
+app.use("/admin", adminRoute);
+app.use("/coc", cocRoute);
 
 mongoose
   .connect(process.env.MONGO_URI, {
