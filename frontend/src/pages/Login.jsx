@@ -19,6 +19,10 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const handleNavigate = () => {
+    navigate("/dashboard");
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Logging in with:", account);
@@ -35,7 +39,6 @@ const Login = () => {
         setAccount({ email: "", password: "" });
       });
   };
-
   const handleAccount = (name, event) => {
     setAccount({
       ...account,
@@ -68,7 +71,7 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form noValidate onSubmit={handleSubmit}>
+        <form noValidate onSubmit={handleNavigate}>
           <TextField
             value={account.email}
             onChange={(event) => handleAccount("email", event)}
@@ -107,7 +110,7 @@ const Login = () => {
             justifyContent="center"
             marginTop="20px"
           >
-            <MuiLink
+            {/* <MuiLink
               component={RouterLink}
               to="/signup"
               underline="none"
@@ -120,7 +123,7 @@ const Login = () => {
               }}
             >
               {"Don't have an account? Sign Up"}
-            </MuiLink>
+            </MuiLink> */}
           </Box>
         </form>
       </Box>

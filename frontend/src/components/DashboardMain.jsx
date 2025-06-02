@@ -1,18 +1,21 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { createTheme } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { DemoProvider, useDemoRouter } from "@toolpad/core/internal";
-import Students from "../pages/Students";
 import Dashboard from "../pages/Dashboard";
-import Accounts from "../pages/Accounts";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import AddStudent from "../pages/AddStudent";
+import StudentRecords from "../pages/StudentRecords";
+import AddAdmin from "../pages/AddAdmin";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import AdminRecords from "../pages/AdminRecords";
 
 const NAVIGATION = [
   {
@@ -25,19 +28,37 @@ const NAVIGATION = [
     icon: <DashboardIcon />,
   },
   {
-    segment: "students",
-    title: "Students",
+    title: "Student",
     icon: <PeopleIcon />,
+    children: [
+      {
+        segment: "addStudent",
+        title: "Add Student",
+      },
+      {
+        segment: "studentRecords",
+        title: "Student Records",
+      },
+    ],
   },
   {
-    segment: "accounts",
-    title: "Accounts",
-    icon: <PeopleIcon />,
+    title: "Admin",
+    icon: <AdminPanelSettingsIcon />,
+    children: [
+      {
+        segment: "addAdmin",
+        title: "Add Admin",
+      },
+      {
+        segment: "adminRecords",
+        title: "Admin Records",
+      },
+    ],
   },
   {
-    segment: "logout",
     title: "Logout",
-    icon: <PeopleIcon />,
+    segment: "logout",
+    icon: <LogoutIcon />,
   },
 ];
 
@@ -67,12 +88,14 @@ function DemoPageContent({ pathname }) {
   }, [pathname, navigate]);
   return (
     <Box sx={{ py: 4, px: 4 }}>
-      {pathname === "/students" ? (
-        <Students pathname="students" />
-      ) : pathname === "/accounts" ? (
-        <Accounts pathname="accounts" />
-      ) : pathname === "/logout" ? (
-        <Typography>Logging out...</Typography>
+      {pathname === "/addStudent" ? (
+        <AddStudent />
+      ) : pathname === "/studentRecords" ? (
+        <StudentRecords />
+      ) : pathname === "/addAdmin" ? (
+        <AddAdmin />
+      ) : pathname === "/adminRecords" ? (
+        <AdminRecords />
       ) : (
         <Dashboard pathname="dashboard" />
       )}

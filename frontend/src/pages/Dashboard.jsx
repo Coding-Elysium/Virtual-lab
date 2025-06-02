@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import CardComponent from "../components/CardComponent";
 import BarGraphComponent from "../components/BarGraphComponen";
 
-const Dashboard = ({ pathname }) => {
+const Dashboard = () => {
   return (
     <Box
       sx={{
