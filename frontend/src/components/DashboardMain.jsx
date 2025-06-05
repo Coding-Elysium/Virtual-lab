@@ -16,6 +16,7 @@ import AddAdmin from "../pages/AddAdmin";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AdminRecords from "../pages/AdminRecords";
+import StudentReview from "../pages/StudentReview";
 
 const NAVIGATION = [
   {
@@ -36,6 +37,10 @@ const NAVIGATION = [
         title: "Add Student",
       },
       {
+        segment: "studentReview",
+        title: "Student Review",
+      },
+      {
         segment: "studentRecords",
         title: "Student Records",
       },
@@ -49,6 +54,7 @@ const NAVIGATION = [
         segment: "addAdmin",
         title: "Add Admin",
       },
+
       {
         segment: "adminRecords",
         title: "Admin Records",
@@ -94,6 +100,8 @@ function DemoPageContent({ pathname }) {
         <StudentRecords />
       ) : pathname === "/addAdmin" ? (
         <AddAdmin />
+      ) : pathname === "/studentReview" ? (
+        <StudentReview />
       ) : pathname === "/adminRecords" ? (
         <AdminRecords />
       ) : (

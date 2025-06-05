@@ -1,12 +1,61 @@
-import { Box, Breadcrumbs, TextField, Typography } from "@mui/material";
-import React from "react";
-import TableWithAction from "../components/TableWithAction";
-import { useState } from "react";
-import InputAdornment from "@mui/material/InputAdornment";
+import React, { useEffect, useState } from "react";
+import UserCard from "../components/UserCard";
+import {
+  Box,
+  Breadcrumbs,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import axios from "axios";
+import { endPoint } from "../helper/helper.jsx";
 
 const StudentRecords = () => {
+  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    axios
+      .get(`${endPoint}/student/read`)
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching students:", error);
+      });
+  }, []);
+
+  // Example in parent component
+  const handleUserUpdate = (updatedOrDeletedUser) => {
+    if (!updatedOrDeletedUser) return;
+
+    if (typeof updatedOrDeletedUser === "string") {
+      // It means deleted user id was passed
+      setUsers((prev) => prev.filter((u) => u._id !== updatedOrDeletedUser));
+    } else {
+      // It means updated user object was passed
+      setUsers((prev) =>
+        prev.map((u) =>
+          u._id === updatedOrDeletedUser._id ? updatedOrDeletedUser : u
+        )
+      );
+    }
+  };
+
+  const filteredUsers = users.filter((user) => {
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    return (
+      fullName.includes(searchTerm.toLowerCase()) ||
+      user.lrn.includes(searchTerm)
+    );
+  });
 
   return (
     <Box
@@ -19,7 +68,7 @@ const StudentRecords = () => {
     >
       <Breadcrumbs>
         <Typography color="text.secondary">Student</Typography>
-        <Typography color="text.primary">Student Records</Typography>
+        <Typography color="text.primary">Student Review</Typography>
       </Breadcrumbs>
 
       <Box sx={{ maxWidth: { xs: "100%", sm: 300 }, width: "100%" }}>
@@ -40,7 +89,21 @@ const StudentRecords = () => {
         />
       </Box>
 
-      <TableWithAction searchTerm={searchTerm} />
+      <Grid container spacing={isSmallScreen ? 0 : 2}>
+        {filteredUsers.map((user) => (
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            key={user._id}
+            sx={isSmallScreen ? { mb: 2, px: 1 } : {}}
+          >
+            <UserCard user={user} onUserUpdate={handleUserUpdate} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, MenuItem } from "@mui/material";
+import axios from "axios";
+import { endPoint } from "../helper/helper.jsx";
+import SuccessModal from "./SuccessModal.jsx";
 
 const StudentForm = () => {
+  const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     lrn: "",
     firstName: "",
@@ -21,7 +25,35 @@ const StudentForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", form);
+    axios
+      .post(`${endPoint}/student/create`, form)
+      .then((response) => {
+        console.log("Status:", response.status); // HTTP status code
+        console.log("Student added successfully:", response.data);
+
+        if (response.status === 200 || response.status === 201) {
+          setForm({
+            lrn: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            gender: "",
+            gradeLevel: "",
+            password: "",
+          });
+          setOpen(true);
+        } else {
+          console.warn("Unexpected status code:", response.status);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("Error status:", error.response.status);
+          console.error("Error data:", error.response.data);
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
   };
 
   return (
@@ -36,8 +68,6 @@ const StudentForm = () => {
       }}
     >
       <Typography variant="h6">Student Information</Typography>
-
-      {/* Row 1: LRN and First Name */}
 
       <TextField
         label="LRN"
@@ -149,6 +179,11 @@ const StudentForm = () => {
       <Button type="submit" variant="contained">
         Submit
       </Button>
+      <SuccessModal
+        open={open}
+        onClose={() => setOpen(false)}
+        message="Student added successfully!"
+      />
     </Box>
   );
 };

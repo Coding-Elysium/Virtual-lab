@@ -25,6 +25,10 @@ const studentSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
+    gender: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
@@ -32,7 +36,9 @@ const studentSchema = new mongoose.Schema(
     gradeLevel: {
       type: String,
       required: true,
-      lowercase: true,
+    },
+    status: {
+      type: String,
     },
   },
   { collection: "students" }
@@ -42,6 +48,9 @@ studentSchema.pre("save", function (next) {
   if (this.firstName) this.firstName = capitalizeWords(this.firstName);
   if (this.lastName) this.lastName = capitalizeWords(this.lastName);
   if (this.email) this.email = this.email.toLowerCase();
+  if (this.gradeLevel) this.gradeLevel = capitalizeWords(this.gradeLevel);
+  if (this.status) this.status = capitalizeWords(this.status);
+  if (this.gender) this.gender = capitalizeWords(this.gender);
 
   next();
 });

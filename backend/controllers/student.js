@@ -1,11 +1,21 @@
 import Student from "../schema/StudentModel.js";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 export const createStudent = async (req, res) => {
   try {
-    const { lrn, firstName, lastName, email, password, gradeLevel } = req.body;
+    const { lrn, firstName, lastName, email, password, gradeLevel, gender } =
+      req.body;
 
-    if (!lrn || !firstName || !lastName || !email || !password || !gradeLevel) {
+    if (
+      !lrn ||
+      !firstName ||
+      !lastName ||
+      !email ||
+      !gender ||
+      !password ||
+      !gradeLevel
+    ) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
@@ -23,8 +33,10 @@ export const createStudent = async (req, res) => {
       firstName,
       lastName,
       email,
+      gender,
       password: hashedPassword,
       gradeLevel,
+      status: "approved",
     });
 
     await student.save();
@@ -42,7 +54,7 @@ export const createStudent = async (req, res) => {
 
 export const getStudents = async (req, res) => {
   try {
-    const students = await Student.find();
+    const students = await Student.find({ status: "Approved" });
     res.status(200).json(students);
   } catch (error) {
     console.error("Error fetching students:", error);
@@ -67,6 +79,57 @@ export const getOneStudent = async (req, res) => {
     res.status(200).json(student);
   } catch (error) {
     console.error("Error fetching student:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const updateStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, email, gradeLevel, gender } = req.body;
+
+    if (!firstName || !lastName || !email || !gender || !gradeLevel) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid student ID." });
+    }
+
+    const student = await Student.findByIdAndUpdate(
+      id,
+      { firstName, lastName, email, gradeLevel, gender },
+      { new: true }
+    );
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found." });
+    }
+
+    res.status(200).json({ message: "Student updated successfully.", student });
+  } catch (error) {
+    console.error("Error updating student:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const deleteStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid student ID." });
+    }
+
+    const student = await Student.findByIdAndDelete(id);
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found." });
+    }
+
+    res.status(200).json({ message: "Student deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting student:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

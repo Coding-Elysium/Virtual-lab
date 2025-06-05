@@ -102,7 +102,19 @@ const TableWithAction = ({ searchTerm }) => {
 
   return (
     <TableContainer component={Paper} sx={{ width: "100%", overflowX: "auto" }}>
-      <Table>
+      <Table
+        sx={{
+          boxShadow: "none",
+          minWidth: 650,
+          "& th": {
+            backgroundColor: theme.palette.primary.light,
+            color: theme.palette.primary.contrastText,
+          },
+          "& td": {
+            borderBottom: "1px solid #e0e0e0",
+          },
+        }}
+      >
         <TableHead>
           <TableRow>
             <TableCell>LRN</TableCell>
