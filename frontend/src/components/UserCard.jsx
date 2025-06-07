@@ -38,8 +38,7 @@ const UserCard = ({ user, onUserUpdate }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleViewProfile = () => {
-    navigate(`/studentProfile`);
-    console.log("View Profile clicked");
+    navigate(`/dashboard/studentProfile/${user._id}`);
   };
 
   const handleEditChange = (e) => {
@@ -105,7 +104,7 @@ const UserCard = ({ user, onUserUpdate }) => {
           {firstName ? firstName.charAt(0).toUpperCase() : "?"}
         </Avatar>
 
-        <Box sx={{ flex: 1, width: "100%" }}>
+        <Box sx={{ flex: 2, width: "100%" }}>
           <CardContent sx={{ pb: 1 }}>
             <Typography variant="h6" align={isSmallScreen ? "center" : "left"}>
               {firstName} {lastName}

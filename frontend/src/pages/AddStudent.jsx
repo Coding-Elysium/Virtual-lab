@@ -1,8 +1,17 @@
 import React from "react";
-import { Box, Breadcrumbs, Typography } from "@mui/material";
+import {
+  Box,
+  Breadcrumbs,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import StudentForm from "../components/StudentForm";
 
 const AddStudent = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box
       sx={{
@@ -10,6 +19,8 @@ const AddStudent = () => {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(100%, 1fr))",
         gap: 4,
+        pl: isSmallScreen ? 0 : 6,
+        pr: isSmallScreen ? 0 : 6,
       }}
     >
       <Breadcrumbs>

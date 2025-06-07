@@ -1,8 +1,10 @@
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import CardComponent from "../components/CardComponent";
 import BarGraphComponent from "../components/BarGraphComponen";
 
 const Dashboard = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Box
       sx={{
@@ -10,6 +12,8 @@ const Dashboard = () => {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(100%, 1fr))",
         gap: 4,
+        pr: isSmallScreen ? 0 : 6,
+        pl: isSmallScreen ? 0 : 6,
       }}
     >
       <Box

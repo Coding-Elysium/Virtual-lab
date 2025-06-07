@@ -32,15 +32,12 @@ const StudentRecords = () => {
       });
   }, []);
 
-  // Example in parent component
   const handleUserUpdate = (updatedOrDeletedUser) => {
     if (!updatedOrDeletedUser) return;
 
     if (typeof updatedOrDeletedUser === "string") {
-      // It means deleted user id was passed
       setUsers((prev) => prev.filter((u) => u._id !== updatedOrDeletedUser));
     } else {
-      // It means updated user object was passed
       setUsers((prev) =>
         prev.map((u) =>
           u._id === updatedOrDeletedUser._id ? updatedOrDeletedUser : u
@@ -64,6 +61,8 @@ const StudentRecords = () => {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(100%, 1fr))",
         gap: 4,
+        pl: isSmallScreen ? 0 : 6,
+        pr: isSmallScreen ? 0 : 6,
       }}
     >
       <Breadcrumbs>
@@ -88,22 +87,39 @@ const StudentRecords = () => {
           }}
         />
       </Box>
-
-      <Grid container spacing={isSmallScreen ? 0 : 2}>
-        {filteredUsers.map((user) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-            key={user._id}
-            sx={isSmallScreen ? { mb: 2, px: 1 } : {}}
-          >
-            <UserCard user={user} onUserUpdate={handleUserUpdate} />
-          </Grid>
-        ))}
-      </Grid>
+      {isSmallScreen ? (
+        <Grid>
+          {filteredUsers.map((user) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              key={user._id}
+              sx={isSmallScreen ? { mb: 2 } : {}}
+            >
+              <UserCard user={user} onUserUpdate={handleUserUpdate} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Grid container spacing={isSmallScreen ? 0 : 2}>
+          {filteredUsers.map((user) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              key={user._id}
+              sx={isSmallScreen ? { mb: 2 } : {}}
+            >
+              <UserCard user={user} onUserUpdate={handleUserUpdate} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 };

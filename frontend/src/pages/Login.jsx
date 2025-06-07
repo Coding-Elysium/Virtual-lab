@@ -19,9 +19,9 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleNavigate = () => {
-    navigate("/dashboard");
-  };
+  // const handleNavigate = () => {
+  //   navigate("/dashboard");
+  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -71,7 +71,7 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form noValidate onSubmit={handleNavigate}>
+        <form noValidate onSubmit={handleSubmit}>
           <TextField
             value={account.email}
             onChange={(event) => handleAccount("email", event)}

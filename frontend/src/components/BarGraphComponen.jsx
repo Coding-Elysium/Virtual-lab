@@ -1,8 +1,11 @@
 import * as React from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 
 export default function BarGraphComponent() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box
       sx={{

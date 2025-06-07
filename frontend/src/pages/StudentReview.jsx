@@ -1,4 +1,11 @@
-import { Box, Breadcrumbs, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Breadcrumbs,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import TableWithAction from "../components/TableWithAction";
 import { useState } from "react";
@@ -8,6 +15,9 @@ import SearchIcon from "@mui/icons-material/Search";
 const StudentReview = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box
       sx={{
@@ -15,6 +25,8 @@ const StudentReview = () => {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(100%, 1fr))",
         gap: 4,
+        pl: isSmallScreen ? 0 : 6,
+        pr: isSmallScreen ? 0 : 6,
       }}
     >
       <Breadcrumbs>
