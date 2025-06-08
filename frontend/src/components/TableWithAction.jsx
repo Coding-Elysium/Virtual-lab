@@ -17,35 +17,30 @@ import {
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import DangerousIcon from "@mui/icons-material/Dangerous";
+import axios from "axios";
+import { endPoint } from "../helper/helper";
 
-const fakeData = [
-  {
-    lrn: "2025001025001",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    gender: "Male",
-    gradeLevel: "Senior High",
-  },
-  {
-    lrn: "2025001025002",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane.smith@example.com",
-    gender: "Female",
-    gradeLevel: "Junior High",
-  },
-];
-
-const TableWithAction = ({ searchTerm }) => {
+const TableWithAction = ({ searchTerm, data, onAccept }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleEdit = (row) => {
-    console.log("Action clicked for:", row);
+    console.log("Edit clicked for:", row);
   };
 
-  const filteredData = fakeData.filter((row) => {
+  const handleAccept = (row) => {
+    const update = { status: "accepted" };
+    axios
+      .put(`${endPoint}/student/accept/${row._id}`, update)
+      .then(() => {
+        onAccept(row._id);
+      })
+      .catch((error) => {
+        console.error("Error accepting student:", error);
+      });
+  };
+
+  const filteredData = data.filter((row) => {
     const fullName = `${row.firstName} ${row.lastName}`.toLowerCase();
     return (
       fullName.includes(searchTerm.toLowerCase()) ||
@@ -71,7 +66,7 @@ const TableWithAction = ({ searchTerm }) => {
           >
             <CardContent sx={{ flex: 1, paddingRight: 2 }}>
               <Typography variant="h6" fontWeight="bold" noWrap>
-                {row.firstName} {row.lastName}
+                {row.firstName}
               </Typography>
               <Typography variant="body2" color="text.secondary" noWrap>
                 LRN: {row.lrn}
@@ -81,7 +76,7 @@ const TableWithAction = ({ searchTerm }) => {
             <Stack direction="row" spacing={1}>
               <IconButton
                 color="primary"
-                onClick={() => handleEdit(row)}
+                onClick={() => handleAccept(row)}
                 size="small"
               >
                 <CheckIcon />
@@ -122,6 +117,7 @@ const TableWithAction = ({ searchTerm }) => {
             <TableCell>Email</TableCell>
             <TableCell>Gender</TableCell>
             <TableCell>Grade Level</TableCell>
+            <TableCell>Status</TableCell>
             <TableCell align="right">Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -133,8 +129,9 @@ const TableWithAction = ({ searchTerm }) => {
               <TableCell>{row.email}</TableCell>
               <TableCell>{row.gender}</TableCell>
               <TableCell>{row.gradeLevel}</TableCell>
+              <TableCell>{row.status || "pending"}</TableCell>
               <TableCell align="right">
-                <IconButton color="primary" onClick={() => handleEdit(row)}>
+                <IconButton color="primary" onClick={() => handleAccept(row)}>
                   <CheckIcon />
                 </IconButton>
                 <IconButton color="secondary" onClick={() => handleEdit(row)}>

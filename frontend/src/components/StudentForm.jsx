@@ -14,6 +14,7 @@ const StudentForm = () => {
     gender: "",
     gradeLevel: "",
     password: "",
+    status: "approved",
   });
 
   const handleChange = (e) => {

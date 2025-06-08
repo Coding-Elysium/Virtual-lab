@@ -24,6 +24,10 @@ const CocOneSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    category: {
+      type: String,
+      required: true,
+    },
     date: {
       type: Date,
       default: Date.now,

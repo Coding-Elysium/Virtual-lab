@@ -6,44 +6,34 @@ import {
   FormControlLabel,
   TextField,
   Typography,
+  Alert,
 } from "@mui/material";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { Link as MuiLink } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { endPoint } from "../helper/helper";
 
 const Login = () => {
-  const [account, setAccount] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [account, setAccount] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // const handleNavigate = () => {
-  //   navigate("/dashboard");
-  // };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Logging in with:", account);
+    setError("");
 
-    axios
-      .post("http://localhost:5000/auth/loginAdmin", account)
-      .then((response) => {
-        console.log("Login successful:", response.data);
-        localStorage.setItem("token", response.data.token);
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        console.error("Login failed:", error);
-        setAccount({ email: "", password: "" });
-      });
+    try {
+      const response = await axios.post(`${endPoint}/auth/loginAdmin`, account);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("admin", JSON.stringify(response.data.user));
+      navigate("/dashboard");
+    } catch (err) {
+      setError("Login failed. Please check your credentials.");
+      setAccount({ email: "", password: "" });
+    }
   };
+
   const handleAccount = (name, event) => {
-    setAccount({
-      ...account,
-      [name]: event.target.value,
-    });
+    setAccount({ ...account, [name]: event.target.value });
   };
 
   useEffect(() => {
@@ -51,80 +41,89 @@ const Login = () => {
     if (token) {
       navigate("/dashboard", { replace: true });
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <Box
       display="flex"
       justifyContent="center"
       alignItems="center"
-      height="90vh"
+      height="100vh"
+      sx={{
+        background: "linear-gradient(135deg, #6b73ff 0%, #000dff 100%)",
+      }}
     >
       <Box
-        border="1px solid #ccc"
-        padding="40px"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        borderRadius="8px"
+        sx={{
+          backgroundColor: "#fff",
+          borderRadius: "16px",
+          padding: "40px",
+          boxShadow: "0 8px 30px rgba(0,0,0,0.1)",
+          width: "100%",
+          maxWidth: "420px",
+        }}
       >
-        <Typography component="h1" variant="h5">
-          Sign in
+        <Typography
+          variant="h4"
+          component="h1"
+          fontWeight="600"
+          textAlign="center"
+          mb={3}
+          color="primary"
+        >
+          Admin Login
         </Typography>
-        <form noValidate onSubmit={handleSubmit}>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        <form onSubmit={handleSubmit}>
           <TextField
             value={account.email}
-            onChange={(event) => handleAccount("email", event)}
+            onChange={(e) => handleAccount("email", e)}
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email"
-            name="email"
+            label="Email Address"
+            autoComplete="email"
             autoFocus
           />
           <TextField
             value={account.password}
-            onChange={(event) => handleAccount("password", event)}
+            onChange={(e) => handleAccount("password", e)}
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
-            id="password"
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox color="primary" />}
             label="Remember me"
           />
-          <Button type="submit" fullWidth variant="contained" color="primary">
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{
+              mt: 2,
+              py: 1.5,
+              fontWeight: 600,
+              textTransform: "none",
+              fontSize: "16px",
+              transition: "transform 0.2s ease",
+              ":hover": { transform: "scale(1.02)" },
+            }}
+          >
             Sign In
           </Button>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            marginTop="20px"
-          >
-            {/* <MuiLink
-              component={RouterLink}
-              to="/signup"
-              underline="none"
-              variant="body2"
-              sx={{
-                textDecoration: "none",
-                "&:hover": {
-                  textDecoration: "none",
-                },
-              }}
-            >
-              {"Don't have an account? Sign Up"}
-            </MuiLink> */}
-          </Box>
         </form>
       </Box>
     </Box>

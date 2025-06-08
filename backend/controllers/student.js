@@ -4,8 +4,16 @@ import mongoose from "mongoose";
 
 export const createStudent = async (req, res) => {
   try {
-    const { lrn, firstName, lastName, email, password, gradeLevel, gender } =
-      req.body;
+    const {
+      lrn,
+      firstName,
+      lastName,
+      email,
+      password,
+      gradeLevel,
+      gender,
+      status,
+    } = req.body;
 
     if (
       !lrn ||
@@ -36,7 +44,7 @@ export const createStudent = async (req, res) => {
       gender,
       password: hashedPassword,
       gradeLevel,
-      status: "approved",
+      status,
     });
 
     await student.save();
@@ -52,9 +60,19 @@ export const createStudent = async (req, res) => {
   }
 };
 
-export const getStudents = async (req, res) => {
+export const getStudentsApproved = async (req, res) => {
   try {
     const students = await Student.find({ status: "Approved" });
+    res.status(200).json(students);
+  } catch (error) {
+    console.error("Error fetching students:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const getStudentsPending = async (req, res) => {
+  try {
+    const students = await Student.find({ status: "Pending" });
     res.status(200).json(students);
   } catch (error) {
     console.error("Error fetching students:", error);
@@ -109,6 +127,33 @@ export const updateStudent = async (req, res) => {
     res.status(200).json({ message: "Student updated successfully.", student });
   } catch (error) {
     console.error("Error updating student:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const acceptStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid student ID." });
+    }
+
+    const student = await Student.findByIdAndUpdate(
+      id,
+      { status: "Approved" },
+      { new: true }
+    );
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found." });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Student accepted successfully.", student });
+  } catch (error) {
+    console.error("Error accepting student:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

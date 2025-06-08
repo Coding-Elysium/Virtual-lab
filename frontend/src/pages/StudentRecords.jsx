@@ -23,7 +23,7 @@ const StudentRecords = () => {
 
   useEffect(() => {
     axios
-      .get(`${endPoint}/student/read`)
+      .get(`${endPoint}/student/read/approved`)
       .then((response) => {
         setUsers(response.data);
       })
@@ -63,6 +63,7 @@ const StudentRecords = () => {
         gap: 4,
         pl: isSmallScreen ? 0 : 6,
         pr: isSmallScreen ? 0 : 6,
+        pt: 4,
       }}
     >
       <Breadcrumbs>

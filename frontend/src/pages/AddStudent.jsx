@@ -21,6 +21,7 @@ const AddStudent = () => {
         gap: 4,
         pl: isSmallScreen ? 0 : 6,
         pr: isSmallScreen ? 0 : 6,
+        pt: 4,
       }}
     >
       <Breadcrumbs>

@@ -6,17 +6,35 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React from "react";
-import TableWithAction from "../components/TableWithAction";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import axios from "axios";
+import TableWithAction from "../components/TableWithAction";
+import { endPoint } from "../helper/helper.jsx";
 
 const StudentReview = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [studentReviews, setStudentReviews] = useState([]);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    axios
+      .get(`${endPoint}/student/read/pending`)
+      .then((response) => {
+        console.log("Data fetched successfully:", response.data);
+        setStudentReviews(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  const handleAcceptStudent = (id) => {
+    setStudentReviews((prev) => prev.filter((student) => student._id !== id));
+  };
 
   return (
     <Box
@@ -27,6 +45,7 @@ const StudentReview = () => {
         gap: 4,
         pl: isSmallScreen ? 0 : 6,
         pr: isSmallScreen ? 0 : 6,
+        pt: 4,
       }}
     >
       <Breadcrumbs>
@@ -52,7 +71,11 @@ const StudentReview = () => {
         />
       </Box>
 
-      <TableWithAction searchTerm={searchTerm} />
+      <TableWithAction
+        searchTerm={searchTerm}
+        data={studentReviews}
+        onAccept={handleAcceptStudent}
+      />
     </Box>
   );
 };
