@@ -9,7 +9,6 @@ import {
   Divider,
   Card,
   CardContent,
-  CardMedia,
   Grid,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -22,43 +21,10 @@ const StudentProfile = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { studentId } = useParams();
   const [studentData, setStudentData] = useState(null);
+  const [examRecords, setExamRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const examRecords = [
-    {
-      id: 1,
-      title: "COC 1",
-      status: "Passed",
-      date: "2025-05-20",
-      image:
-        "https://res.cloudinary.com/dhceioavi/image/upload/v1749359823/appetizer_mgjyom.png",
-    },
-    {
-      id: 2,
-      title: "COC 2",
-      status: "Failed",
-      date: "2025-04-15",
-      image:
-        "https://res.cloudinary.com/dhceioavi/image/upload/v1749359823/appetizer_mgjyom.png",
-    },
-    {
-      id: 2,
-      title: "COC 3",
-      status: "Pending",
-      date: "2025-04-15",
-      image:
-        "https://res.cloudinary.com/dhceioavi/image/upload/v1749359823/appetizer_mgjyom.png",
-    },
-    {
-      id: 2,
-      title: "COC 3",
-      status: "Pending",
-      date: "2025-04-15",
-      image:
-        "https://res.cloudinary.com/dhceioavi/image/upload/v1749359823/appetizer_mgjyom.png",
-    },
-  ];
-
+  // Fetch student data
   useEffect(() => {
     axios
       .get(`${endPoint}/student/read/${studentId}`)
@@ -70,6 +36,19 @@ const StudentProfile = () => {
       })
       .finally(() => {
         setLoading(false);
+      });
+  }, [studentId]);
+
+  useEffect(() => {
+    axios
+      .get(`${endPoint}/coc/cocone/${studentId}`)
+      .then((response) => {
+        setExamRecords(response.data);
+        console.log("COC Records:", response.data);
+        console.log("Exam Records:", examRecords.exams.cocOne);
+      })
+      .catch((error) => {
+        console.error("Error fetching COC records:", error);
       });
   }, [studentId]);
 
@@ -104,20 +83,20 @@ const StudentProfile = () => {
         <>
           <Paper elevation={3} sx={{ p: 4, mt: 3, borderRadius: 3 }}>
             <Typography variant="h4" fontWeight="bold" gutterBottom>
-              {studentData.firstName} {studentData.lastName}
+              {studentData?.firstName} {studentData?.lastName}
             </Typography>
             <Divider sx={{ my: 2 }} />
             <Typography variant="body1">
-              <strong>LRN:</strong> {studentData.lrn}
+              <strong>LRN:</strong> {studentData?.lrn}
             </Typography>
             <Typography variant="body1">
-              <strong>Email:</strong> {studentData.email}
+              <strong>Email:</strong> {studentData?.email}
             </Typography>
             <Typography variant="body1">
-              <strong>Gender:</strong> {studentData.gender}
+              <strong>Gender:</strong> {studentData?.gender}
             </Typography>
             <Typography variant="body1">
-              <strong>Grade Level:</strong> {studentData.gradeLevel}
+              <strong>Grade Level:</strong> {studentData?.gradeLevel}
             </Typography>
           </Paper>
 
@@ -125,56 +104,45 @@ const StudentProfile = () => {
             Records
           </Typography>
 
-          <Grid container spacing={3} sx={{ mt: 1 }}>
-            {examRecords.map((exam, index) => (
-              <Grid item xs={12} sm={6} md={4} key={`${exam.id}-${index}`}>
-                <Link to={`/dashboard/coc1`} style={{ textDecoration: "none" }}>
-                  <Card
-                    elevation={4}
-                    sx={{ borderRadius: 3, cursor: "pointer" }}
-                  >
-                    <Box
-                      sx={{
-                        height: 200,
-                        width: "100%",
-                        backgroundImage: `url(${exam.image})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        borderRadius: "12px 12px 0 0",
-                      }}
-                    />
-                    <CardContent>
-                      <Typography variant="h6" fontWeight="bold">
-                        {exam.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          mt: 1,
-                          fontWeight: 600,
-                          color:
-                            exam.status === "Passed"
-                              ? "green"
-                              : exam.status === "Failed"
-                                ? "error.main"
-                                : "orange",
-                        }}
-                      >
-                        {exam.status}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 0.5 }}
-                      >
-                        Date: {exam.date}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </Grid>
-            ))}
-          </Grid>
+          {examRecords?.exams?.cocOne && (
+            <Card sx={{ mb: 3 }}>
+              <CardContent>
+                <Typography variant="h6">COC One</Typography>
+                <Typography variant="body2">
+                  <strong>Type:</strong> {examRecords.exams.cocOne.typeFood}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Category:</strong> {examRecords.exams.cocOne.category}
+                </Typography>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Grid container spacing={2}>
+                  {examRecords.exams.cocOne.stages.map((stage, index) => (
+                    <Grid item xs={12} sm={4} key={index}>
+                      <Card variant="outlined">
+                        <CardContent>
+                          <Typography variant="subtitle1" fontWeight="bold">
+                            {stage.name}
+                          </Typography>
+                          <Typography variant="body2">
+                            {stage.description}
+                          </Typography>
+                          <Typography variant="body2" sx={{ mt: 1 }}>
+                            <strong>Status:</strong> {stage.status}
+                          </Typography>
+                          <Typography variant="body2" sx={{ mt: 1 }}>
+                            <strong>Recipe:</strong>{" "}
+                            {stage.recipe && stage.recipe.join(", ")}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </CardContent>
+            </Card>
+          )}
         </>
       )}
     </Box>
