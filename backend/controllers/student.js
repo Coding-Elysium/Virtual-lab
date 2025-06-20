@@ -52,7 +52,7 @@ export const createStudent = async (req, res) => {
     const { password: _, ...studentData } = student.toObject();
 
     res
-      .status(201)
+      .status(200)
       .json({ message: "Student added successfully", student: studentData });
   } catch (error) {
     console.error("Error adding student:", error);

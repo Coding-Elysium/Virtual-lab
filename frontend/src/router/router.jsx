@@ -12,6 +12,7 @@ import StudentProfile from "../components/StudentProfile";
 import Logout from "../components/Logout";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Coc1 from "../components/Coc1";
+import COCDetail from "../pages/COCDetails";
 
 const router = createBrowserRouter([
   {
@@ -56,8 +57,8 @@ const router = createBrowserRouter([
         element: <StudentProfile />,
       },
       {
-        path: "coc1",
-        element: <Coc1 />,
+        path: "studentProfile/:studentId/coc1",
+        element: <COCDetail />,
       },
       { path: "*", element: <h2>404 - Page not found</h2> },
     ],

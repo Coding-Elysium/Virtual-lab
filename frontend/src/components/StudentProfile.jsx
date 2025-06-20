@@ -1,20 +1,18 @@
+import React, { useEffect, useState } from "react";
 import {
   Box,
-  Breadcrumbs,
   Typography,
-  useMediaQuery,
-  useTheme,
   CircularProgress,
   Paper,
   Divider,
-  Card,
-  CardContent,
-  Grid,
+  Breadcrumbs,
+  useMediaQuery,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useTheme } from "@mui/material/styles";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { endPoint } from "../helper/helper";
-import { Link, useParams } from "react-router-dom";
+import COCCard from "./COCCard";
 
 const StudentProfile = () => {
   const theme = useTheme();
@@ -23,6 +21,7 @@ const StudentProfile = () => {
   const [studentData, setStudentData] = useState(null);
   const [examRecords, setExamRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingRecords, setLoadingRecords] = useState(true);
 
   // Fetch student data
   useEffect(() => {
@@ -39,18 +38,11 @@ const StudentProfile = () => {
       });
   }, [studentId]);
 
-  useEffect(() => {
-    axios
-      .get(`${endPoint}/coc/cocone/${studentId}`)
-      .then((response) => {
-        setExamRecords(response.data);
-        console.log("COC Records:", response.data);
-        console.log("Exam Records:", examRecords.exams.cocOne);
-      })
-      .catch((error) => {
-        console.error("Error fetching COC records:", error);
-      });
-  }, [studentId]);
+  const navigate = useNavigate();
+
+  const handleClickCOC1 = () => {
+    navigate(`/dashboard/studentProfile/${studentId}/coc1`);
+  };
 
   return (
     <Box
@@ -104,45 +96,39 @@ const StudentProfile = () => {
             Records
           </Typography>
 
-          {examRecords?.exams?.cocOne && (
-            <Card sx={{ mb: 3 }}>
-              <CardContent>
-                <Typography variant="h6">COC One</Typography>
-                <Typography variant="body2">
-                  <strong>Type:</strong> {examRecords.exams.cocOne.typeFood}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Category:</strong> {examRecords.exams.cocOne.category}
-                </Typography>
-
-                <Divider sx={{ my: 2 }} />
-
-                <Grid container spacing={2}>
-                  {examRecords.exams.cocOne.stages.map((stage, index) => (
-                    <Grid item xs={12} sm={4} key={index}>
-                      <Card variant="outlined">
-                        <CardContent>
-                          <Typography variant="subtitle1" fontWeight="bold">
-                            {stage.name}
-                          </Typography>
-                          <Typography variant="body2">
-                            {stage.description}
-                          </Typography>
-                          <Typography variant="body2" sx={{ mt: 1 }}>
-                            <strong>Status:</strong> {stage.status}
-                          </Typography>
-                          <Typography variant="body2" sx={{ mt: 1 }}>
-                            <strong>Recipe:</strong>{" "}
-                            {stage.recipe && stage.recipe.join(", ")}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </CardContent>
-            </Card>
-          )}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              flexWrap: "wrap",
+              gap: 2,
+            }}
+          >
+            <Box
+              sx={{
+                flex: "1 1 100%",
+                maxWidth: { xs: "100%", sm: "calc(33.33% - 16px)" },
+              }}
+            >
+              <COCCard title={"COC 1"} onClick={handleClickCOC1} />
+            </Box>
+            <Box
+              sx={{
+                flex: "1 1 100%",
+                maxWidth: { xs: "100%", sm: "calc(33.33% - 16px)" },
+              }}
+            >
+              <COCCard title={"COC 2"} />
+            </Box>
+            <Box
+              sx={{
+                flex: "1 1 100%",
+                maxWidth: { xs: "100%", sm: "calc(33.33% - 16px)" },
+              }}
+            >
+              <COCCard title={"COC 3"} />
+            </Box>
+          </Box>
         </>
       )}
     </Box>

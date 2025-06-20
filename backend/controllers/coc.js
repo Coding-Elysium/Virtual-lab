@@ -1,78 +1,36 @@
-import CocOne from "../schema/CocOneModel.js";
-import Student from "../schema/StudentModel.js";
+import Coc from "../schema/CocModel.js";
 
-export const addCocOneController = async (req, res) => {
+export const createCoc = async (req, res) => {
   try {
-    const { imageFood, typeFood, student, category, stages } = req.body;
-
-    if (!imageFood || !typeFood || !student || !category || !stages) {
-      return res.status(400).json({ message: "All fields are required." });
-    }
-
-    const studentExists = await Student.findById(student);
-    if (!studentExists) {
-      return res.status(404).json({ message: "Student not found." });
-    }
-
-    if (!Array.isArray(stages) || stages.length !== 3) {
-      return res
-        .status(400)
-        .json({ message: "Exactly 3 stages are required." });
-    }
-
-    for (const stage of stages) {
-      if (
-        !stage.name ||
-        !stage.description ||
-        !stage.recipe ||
-        !Array.isArray(stage.recipe)
-      ) {
-        return res.status(400).json({
-          message:
-            "Each stage must include name, description, and recipe array.",
-        });
-      }
-    }
-
-    const newCocOne = new CocOne({
+    const {
       imageFood,
-      typeFood,
+      typeOfExam,
       student,
-      category,
-      stages,
-    });
+      ingredients,
+      tools,
+      procedure,
+      isWellCooked,
+      time,
+    } = req.body;
 
-    await newCocOne.save();
-
-    res.status(201).json({
-      message: "CocOne created successfully.",
-      data: newCocOne,
-    });
-  } catch (error) {
-    console.error("Error creating CocOne:", error);
-    res.status(500).json({ message: "Server error.", error: error.message });
-  }
-};
-
-export const getStudentProfile = async (req, res) => {
-  try {
-    const studentId = req.params.id;
-
-    const student = await Student.findById(studentId);
-    if (!student) {
-      return res.status(404).json({ message: "Student not found." });
-    }
-
-    const cocOne = await CocOne.findOne({ student: studentId });
-
-    res.status(200).json({
+    const newCoc = new Coc({
+      imageFood,
+      typeOfExam,
       student,
-      exams: {
-        cocOne,
-      },
+      ingredients,
+      tools,
+      procedure,
+      isWellCooked,
+      time,
     });
+
+    const savedCoc = await newCoc.save();
+
+    res
+      .status(200)
+      .json({ message: "Student added successfully", student: studentData });
   } catch (error) {
-    console.error("Error fetching student profile:", error);
+    console.error("Error adding student:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
