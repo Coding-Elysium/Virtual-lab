@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -16,6 +16,9 @@ import {
   Stack,
   Grid,
 } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { endPoint } from "../helper/helper";
+import axios from "axios";
 
 const initialScores = {
   dimension: {
@@ -43,68 +46,25 @@ const CocOne = () => {
   const [open, setOpen] = useState(false);
   const [selectedCoc, setSelectedCoc] = useState(null);
   const [scores, setScores] = useState(initialScores);
+  const [cocDataRaw, setCocDataRaw] = useState([]);
+  const { studentId } = useParams();
+  const [loading, setLoading] = useState(true);
 
-  // Your sample data (1 real, 2 missing image)
-  const cocDataRaw = [
-    {
-      imageFood:
-        "https://res.cloudinary.com/dhceioavi/image/upload/v1749359824/dessert_jlfn7h.png",
-      typeOfExam: "coc2",
-      category: "Appetizer",
-      ingredients: [
-        "Tomato sauce",
-        "Ground beef",
-        "Mozzarella cheese",
-        "Lasagna noodles",
-      ],
-      tools: [
-        { name: "Oven", usage: "Used to bake the lasagna" },
-        { name: "Spatula", usage: "Used to serve portions" },
-      ],
-      procedure: [
-        "Preheat the oven to 375°F",
-        "Layer noodles, sauce, and cheese",
-        "Bake for 45 minutes",
-      ],
-      isWellCooked: true,
-      time: {
-        start: "2025-06-22T10:00:00.000Z",
-        end: "2025-06-22T11:00:00.000Z",
-      },
-      status: "Pending",
-      score: 18,
-    },
-    {
-      imageFood:
-        "https://res.cloudinary.com/dhceioavi/image/upload/v1749359824/dessert_jlfn7h.png",
-      typeOfExam: "coc2",
-      category: "Appetizer",
-      ingredients: [
-        "Tomato sauce",
-        "Ground beef",
-        "Mozzarella cheese",
-        "Lasagna noodles",
-      ],
-      tools: [
-        { name: "Oven", usage: "Used to bake the lasagna" },
-        { name: "Spatula", usage: "Used to serve portions" },
-      ],
-      procedure: [
-        "Preheat the oven to 375°F",
-        "Layer noodles, sauce, and cheese",
-        "Bake for 45 minutes",
-      ],
-      isWellCooked: true,
-      time: {
-        start: "2025-06-22T10:00:00.000Z",
-        end: "2025-06-22T11:00:00.000Z",
-      },
-      status: "Pending",
-      score: 18,
-    },
-  ];
+  useEffect(() => {
+    axios
+      .get(`${endPoint}/coc/read/${studentId}`)
+      .then((response) => {
+        console.log(response.data);
+        setCocDataRaw(response.data);
+      })
+      .catch((error) => {
+        console.log(`Error fetching data`, error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [studentId]);
 
-  // Default filler if less than 3
   const defaultCocItem = {
     imageFood: null,
     typeOfExam: "coc2",
@@ -210,9 +170,9 @@ const CocOne = () => {
 
               <Box sx={{ p: 2 }}>
                 <Typography variant="body2" fontWeight="bold">
-                  Status:{" "}
+                  Total Score:{" "}
                   <Box component="span" sx={{ color: "#999" }}>
-                    {item.status}
+                    {item.score}
                   </Box>
                 </Typography>
               </Box>

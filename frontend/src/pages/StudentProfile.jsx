@@ -21,7 +21,6 @@ const StudentProfile = () => {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch student data
   useEffect(() => {
     axios
       .get(`${endPoint}/student/read/${studentId}`)
@@ -34,12 +33,12 @@ const StudentProfile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [studentId]);
+  }, []);
 
   const navigate = useNavigate();
 
   const handleClickCOC1 = () => {
-    navigate(`/dashboard/cocone`);
+    navigate(`/dashboard/cocone/${studentId}`);
   };
 
   return (

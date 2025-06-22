@@ -23,9 +23,7 @@ export const getStudentCoc = async (req, res) => {
         .json({ message: "No COC records found for this student." });
     }
 
-    res
-      .status(200)
-      .json({ message: "COC records retrieved successfully", data: cocs });
+    res.status(200).json(cocs);
   } catch (error) {
     console.error("Error fetching COC records:", error);
     res.status(500).json({ message: "Server error", error: error.message });

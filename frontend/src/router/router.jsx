@@ -56,7 +56,7 @@ const router = createBrowserRouter([
         element: <StudentProfile />,
       },
       {
-        path: "cocone",
+        path: "cocone/:studentId",
         element: <CocOne />,
       },
       { path: "*", element: <h2>404 - Page not found</h2> },
