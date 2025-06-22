@@ -12,16 +12,14 @@ import { useTheme } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { endPoint } from "../helper/helper";
-import COCCard from "./COCCard";
+import COCCard from "../components/COCCard";
 
 const StudentProfile = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { studentId } = useParams();
   const [studentData, setStudentData] = useState(null);
-  const [examRecords, setExamRecords] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingRecords, setLoadingRecords] = useState(true);
 
   // Fetch student data
   useEffect(() => {
@@ -41,7 +39,7 @@ const StudentProfile = () => {
   const navigate = useNavigate();
 
   const handleClickCOC1 = () => {
-    navigate(`/dashboard/studentProfile/${studentId}/coc1`);
+    navigate(`/dashboard/cocone`);
   };
 
   return (
@@ -118,7 +116,10 @@ const StudentProfile = () => {
                 maxWidth: { xs: "100%", sm: "calc(33.33% - 16px)" },
               }}
             >
-              <COCCard title={"COC 2"} />
+              <COCCard
+                title={"COC 2"}
+                image="https://res.cloudinary.com/dhceioavi/image/upload/v1749359823/soup_mbvceo.png"
+              />
             </Box>
             <Box
               sx={{
@@ -126,7 +127,10 @@ const StudentProfile = () => {
                 maxWidth: { xs: "100%", sm: "calc(33.33% - 16px)" },
               }}
             >
-              <COCCard title={"COC 3"} />
+              <COCCard
+                title={"COC 3"}
+                image="https://res.cloudinary.com/dhceioavi/image/upload/v1749359823/appetizer_mgjyom.png"
+              />
             </Box>
           </Box>
         </>

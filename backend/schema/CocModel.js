@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 import { capitalizeWords } from "../helpers/helpers.js";
 
+const categoryEnumByType = {
+  coc1: ["soup", "main dish", "vegetable side dish", "starch", "sauce"],
+  coc2: ["appetizer", "salad", "sandwich"],
+  coc3: ["dessert"],
+};
+
 const cocSchema = new mongoose.Schema(
   {
     imageFood: {
@@ -11,6 +17,18 @@ const cocSchema = new mongoose.Schema(
       type: String,
       enum: ["coc1", "coc2", "coc3"],
       required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (value) {
+          const allowed = categoryEnumByType[this.typeOfExam?.toLowerCase()];
+          return allowed ? allowed.includes(value.toLowerCase()) : false;
+        },
+        message: (props) =>
+          `Category ${props.value} is not in the type of Exam.`,
+      },
     },
     studentId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,7 +48,6 @@ const cocSchema = new mongoose.Schema(
     procedure: {
       type: [String],
     },
-    //!TODO SAFETY WORK HABITS
     isWellCooked: {
       type: Boolean,
       required: true,
@@ -51,6 +68,8 @@ const cocSchema = new mongoose.Schema(
 
 cocSchema.pre("save", function (next) {
   if (this.typeOfExam) this.typeOfExam = this.typeOfExam.toLowerCase();
+  if (this.category) this.category = this.category.toLowerCase();
+
   if (this.ingredients && Array.isArray(this.ingredients)) {
     this.ingredients = this.ingredients.map((item) =>
       capitalizeWords(item.trim())
@@ -72,5 +91,4 @@ cocSchema.pre("save", function (next) {
 });
 
 const Coc = mongoose.model("Coc", cocSchema);
-
 export default Coc;

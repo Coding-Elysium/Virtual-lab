@@ -68,7 +68,7 @@ const StudentRecords = () => {
     >
       <Breadcrumbs>
         <Typography color="text.secondary">Student</Typography>
-        <Typography color="text.primary">Student Review</Typography>
+        <Typography color="text.primary">Student Records</Typography>
       </Breadcrumbs>
 
       <Box sx={{ maxWidth: { xs: "100%", sm: 300 }, width: "100%" }}>

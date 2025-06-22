@@ -8,11 +8,10 @@ import StudentRecords from "../pages/StudentRecords";
 import AddAdmin from "../pages/AddAdmin";
 import AdminRecords from "../pages/AdminRecords";
 import StudentReview from "../pages/StudentReview";
-import StudentProfile from "../components/StudentProfile";
+import StudentProfile from "../pages/StudentProfile";
 import Logout from "../components/Logout";
 import ProtectedRoute from "../components/ProtectedRoute";
-import Coc1 from "../components/Coc1";
-import COCDetail from "../pages/COCDetails";
+import CocOne from "../pages/CocOne";
 
 const router = createBrowserRouter([
   {
@@ -57,8 +56,8 @@ const router = createBrowserRouter([
         element: <StudentProfile />,
       },
       {
-        path: "studentProfile/:studentId/coc1",
-        element: <COCDetail />,
+        path: "cocone",
+        element: <CocOne />,
       },
       { path: "*", element: <h2>404 - Page not found</h2> },
     ],
